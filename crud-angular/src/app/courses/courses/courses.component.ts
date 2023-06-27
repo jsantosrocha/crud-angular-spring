@@ -1,3 +1,4 @@
+import { ActivatedRoute, Router } from '@angular/router';
 import { CoursesService } from './../services/courses.service';
 import { Component } from '@angular/core';
 import { Course } from '../model/course';
@@ -13,11 +14,13 @@ import { ErroDialogComponent } from 'src/app/shared/components/erro-dialog/erro-
 })
 export class CoursesComponent {
   courses$: Observable<Course[]>;
-  displayedColumns = ['name', 'category'];
+  displayedColumns = ['name', 'category', 'activity'];
 
   constructor(
     private coursesService: CoursesService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private router: Router,
+    private route: ActivatedRoute,
     ){
       this.courses$ = this.coursesService.list()
       .pipe(
@@ -32,6 +35,10 @@ export class CoursesComponent {
     this.dialog.open(ErroDialogComponent, {
       data: errorMsg,
     });
+  }
+
+  onAdd( ) {
+    this.router.navigate(['new'], {relativeTo: this.route});
   }
 }
 
