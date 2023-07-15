@@ -18,11 +18,12 @@ export class CourseFormComponent {
     });
   }
 
-  onCancel() {
-    throw new Error('Method not implemented.');
+  onSubmit() {
+    console.log(this.form.value)
   }
 
-  onSubmit() {
-  throw new Error('Method not implemented.');
+  onCancel() {
+    console.log(this.form.value)
   }
+
 }
