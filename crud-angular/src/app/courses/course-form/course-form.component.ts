@@ -1,34 +1,46 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, NonNullableFormBuilder } from '@angular/forms';
+import { Location } from '@angular/common';
 import { CoursesService } from '../services/courses.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-course-form',
   templateUrl: './course-form.component.html',
-  styleUrls: ['./course-form.component.scss']
+  styleUrls: ['./course-form.component.scss'],
 })
 
 export class CourseFormComponent {
 
-  form: FormGroup;
+  form = this.formBuilder.group({
+    name: [''],
+    category: ['']
+  });
 
   constructor(
-    private formBuilder: FormBuilder,
-    private service: CoursesService
-    ){
-    this.form = this.formBuilder.group({
-      name: [null],
-      category: [null]
-    });
-  }
+    private formBuilder: NonNullableFormBuilder,
+    private service: CoursesService,
+    private snackBar: MatSnackBar,
+    private location: Location
+  ){}
 
-  //necessário se inscrever no Observable
   onSubmit() {
-    this.service.save(this.form.value).subscribe(result => console.log(result));
+    this.service.save(this.form.value).subscribe({
+      next: () => {this.onSucess(); this.onCancel()},
+      error: () => this.onError(),
+      complete: ()=>{}}
+    );
   }
 
   onCancel() {
-    console.log(this.form.value)
+    this.location.back();
   }
 
+  private onSucess(){
+    this.snackBar.open('Sucess','',{duration: 3000})
+  }
+
+  private onError(){
+    this.snackBar.open('Error','',{duration: 3000})
+  }
 }
