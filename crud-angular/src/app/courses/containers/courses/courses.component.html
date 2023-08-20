@@ -4,6 +4,7 @@
     <app-cousers-list
       *ngIf="courses$ | async as courses; else loading"
       [courses]="courses"
+      (add)="onAdd()"
     >
     </app-cousers-list>
 
